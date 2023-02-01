@@ -1,10 +1,20 @@
 <template>
   <div>
-    <button></button>
+    <button @click="install">btn</button>
   </div>
 </template>
-<script setup>
-await useFetch('/api/installModule')
+<script>
+export default {
+  name: 'app',
+  methods: {
+    install() {
+      $fetch('/api/installModule')
+      .then(res => {
+        console.log(res)
+      })
+    }
+  }
+}
 </script>
 <style>
  button {

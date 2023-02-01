@@ -3,7 +3,7 @@ import { resolve } from 'pathe'
 
 export default defineEventHandler(async (event) => {
     const { require } = createCommonJS(import.meta.url)
-    const playgroundUrl = resolve(process.cwd(), './playground')
+    const playgroundUrl = resolve(process.cwd(), './platform')
     const LMIFY = require('lmify')
     const lmify = new LMIFY({
         rootDir: playgroundUrl,

@@ -1,6 +1,6 @@
 import { createCommonJS } from 'mlly'
 import { resolve } from 'pathe' 
-
+// @ts-ignore
 export default defineEventHandler(async (event) => {
     const { require } = createCommonJS(import.meta.url)
     const playgroundUrl = resolve(process.cwd(), './platform')
@@ -12,7 +12,8 @@ export default defineEventHandler(async (event) => {
         stderr: null,
     })
     try {
-        await lmify.install('undici')
+        const query = await getQuery(event)
+        await lmify.install(query.moduleName)
     } catch (error) {
         setResponseStatus(500)
         return ("Install failed!")

@@ -1,91 +1,16 @@
 <template>
   <div class="app_flex">
     <h1 class="site_title">KACHALKA</h1>
-    <v-text-field v-model="serch" clearable label="Search" variant="solo"></v-text-field>
+    <v-text-field v-model="search" clearable label="Search" variant="solo"></v-text-field>
     <v-container class="app_container">
-      <appCard v-if="searchName.includes('lodash')">Lodash 
-        <template #subtitle>A modern JavaScript utility library<br> delivering modularity,<br> performance & extras.</template>
-        <template #button>      
-          <v-btn
-            variant="outlined"
-            size="small"
-            @click="install('lodash')"
-          >
+      <appCard v-for="npmPackage in searchedPackages">
+        {{ npmPackage.name }}
+        <template #subtitle>{{ npmPackage.subtitle }}</template>
+        <template #button>
+          <v-btn variant="outlined" size="small" @click="install(npmPackage.name)">
             download
           </v-btn></template>
-        <template #image><v-img src="https://lodash.com/assets/img/lodash.svg"></v-img></template>
-      </appCard>
-      <appCard v-if="searchName.includes('chalk')">Chalk
-        <template #subtitle>Terminal string styling done right</template>
-        <template #button>      
-          <v-btn
-            variant="outlined"
-            size="small"
-            @click="install('chalk')"
-          >
-          download
-          </v-btn></template>
-        <template #image><v-img src="https://raw.githubusercontent.com/chalk/chalk/HEAD/media/logo.svg"></v-img></template>
-      </appCard>
-      <appCard v-if="searchName.includes('quasar')">Quasar
-        <template #subtitle>Build high-performance VueJS<br> user interfaces in<br> record time.</template>
-        <template #button>      
-          <v-btn
-            variant="outlined"
-            size="small"
-            @click="install('quasar')"
-          >
-          download
-          </v-btn></template>
-        <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
-      </appCard>
-      <appCard v-if="searchName.includes('quasar')">Quasar
-        <template #subtitle>Build high-performance VueJS<br> user interfaces in<br> record time.</template>
-        <template #button>      
-          <v-btn
-            variant="outlined"
-            size="small"
-            @click="install('quasar')"
-          >
-          download
-          </v-btn></template>
-        <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
-      </appCard>
-      <appCard v-if="searchName.includes('quasar')">Quasar
-        <template #subtitle>Build high-performance VueJS<br> user interfaces in<br> record time.</template>
-        <template #button>      
-          <v-btn
-            variant="outlined"
-            size="small"
-            @click="install('quasar')"
-          >
-          download
-          </v-btn></template>
-        <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
-      </appCard>
-      <appCard v-if="searchName.includes('quasar')">Quasar
-        <template #subtitle>Build high-performance VueJS<br> user interfaces in<br> record time.</template>
-        <template #button>      
-          <v-btn
-            variant="outlined"
-            size="small"
-            @click="install('quasar')"
-          >
-          download
-          </v-btn></template>
-        <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
-      </appCard>
-      <appCard v-if="searchName.includes('quasar')">Quasar
-        <template #subtitle>Build high-performance VueJS<br> user interfaces in<br> record time.</template>
-        <template #button>      
-          <v-btn
-            variant="outlined"
-            size="small"
-            @click="install('quasar')"
-          >
-          download
-          </v-btn></template>
-        <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
+        <template #image><v-img :src="npmPackage.image"></v-img></template>
       </appCard>
     </v-container>
   </div>
@@ -93,31 +18,36 @@
 <script>
 import appCard from './components/appCard.vue'
 
+const packagesList = [
+  { name: 'lodash', subtitle: 'A modern JavaScript utility library delivering modularity, performance & extras.', image: 'https://lodash.com/assets/img/lodash.svg' },
+  { name: 'chalk', subtitle: 'Terminal string styling done right', image: 'https://raw.githubusercontent.com/chalk/chalk/HEAD/media/logo.svg' },
+  { name: 'quasar', subtitle: 'Build high-performance VueJS user interfaces in record time.', image: 'https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg' },
+]
+
 export default {
   name: 'app',
   components: {
     appCard,
   },
   data() {
-   return {
-    serch: '',
-    nameData: ['lodash', 'chalk', 'quasar'],
-    appName: ''
-   }
+    return {
+      search: '',
+      appName: ''
+    }
   },
   computed: {
-    searchName() {
-      return this.nameData.filter( elem => {
-        return elem.includes(this.serch);
-      });
-    },
+    searchedPackages() {
+      return packagesList.filter((item) => {
+        return item.name.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
   },
   methods: {
     install(appName) {
-      $fetch('/api/installModule', { query:{ moduleName: appName } })
-      .then(res => {
-        console.log(res)
-      })
+      $fetch('/api/installModule', { query: { moduleName: appName } })
+        .then(res => {
+          console.log(res)
+        })
     }
   }
 }
@@ -133,6 +63,7 @@ export default {
   padding: 30px 50px;
   background-color: #08E8DE;
 }
+
 .app_container {
   display: flex;
   flex-wrap: wrap;
@@ -140,27 +71,33 @@ export default {
   max-width: 1200px;
   gap: 20px;
 }
+
 .site_title {
   font-size: 120px;
 }
+
 .v-btn {
   width: 100px;
 }
+
 .v-card-actions {
   padding: 8px 16px !important;
 }
+
 .v-input__details {
   display: none !important;
 }
-.v-input{
+
+.v-input {
   flex: none !important;
 }
-.v-input__control{
+
+.v-input__control {
   height: 55px;
   min-width: 500px;
 }
- button {
+
+button {
   height: 20px;
   width: 40px;
- }
-</style>
+}</style>

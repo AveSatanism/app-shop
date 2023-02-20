@@ -1,7 +1,7 @@
 <template>
   <div class="app_flex">
     <h1 class="site_title">KACHALKA</h1>
-    <v-text-field v-model="serch" clearable label="Поиск" variant="solo"></v-text-field>
+    <v-text-field v-model="serch" clearable label="Search" variant="solo"></v-text-field>
     <v-container class="app_container">
       <appCard v-if="searchName.includes('lodash')">Lodash 
         <template #subtitle>A modern JavaScript utility library<br> delivering modularity,<br> performance & extras.</template>
@@ -11,7 +11,7 @@
             size="small"
             @click="install('lodash')"
           >
-            start
+            download
           </v-btn></template>
         <template #image><v-img src="https://lodash.com/assets/img/lodash.svg"></v-img></template>
       </appCard>
@@ -23,7 +23,7 @@
             size="small"
             @click="install('chalk')"
           >
-            start
+          download
           </v-btn></template>
         <template #image><v-img src="https://raw.githubusercontent.com/chalk/chalk/HEAD/media/logo.svg"></v-img></template>
       </appCard>
@@ -35,7 +35,7 @@
             size="small"
             @click="install('quasar')"
           >
-            start
+          download
           </v-btn></template>
         <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
       </appCard>
@@ -47,7 +47,7 @@
             size="small"
             @click="install('quasar')"
           >
-            start
+          download
           </v-btn></template>
         <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
       </appCard>
@@ -59,7 +59,7 @@
             size="small"
             @click="install('quasar')"
           >
-            start
+          download
           </v-btn></template>
         <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
       </appCard>
@@ -71,7 +71,7 @@
             size="small"
             @click="install('quasar')"
           >
-            start
+          download
           </v-btn></template>
         <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
       </appCard>
@@ -83,7 +83,7 @@
             size="small"
             @click="install('quasar')"
           >
-            start
+          download
           </v-btn></template>
         <template #image><v-img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg"></v-img></template>
       </appCard>
@@ -142,6 +142,9 @@ export default {
 }
 .site_title {
   font-size: 120px;
+}
+.v-btn {
+  width: 100px;
 }
 .v-card-actions {
   padding: 8px 16px !important;

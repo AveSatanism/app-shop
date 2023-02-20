@@ -16,6 +16,7 @@
   </div>
 </template>
 <script>
+import { debounce } from 'perfect-debounce'
 import appCard from './components/appCard.vue'
 
 const packagesList = [
@@ -32,7 +33,13 @@ export default {
   data() {
     return {
       search: '',
-      appName: ''
+      appName: '',
+      debouncedLogSearch: debounce(this.logSearch, 500)
+    }
+  },
+  watch: {
+    search() {
+      this.debouncedLogSearch()
     }
   },
   computed: {
@@ -43,6 +50,10 @@ export default {
     }
   },
   methods: {
+    logSearch() {
+      // Нам нужно использовать debounce, чтобы не делать запросы на сервер при каждом нажатии клавиши. Если пользователь вводит текст, то мы ждем 500 мс, и только потом делаем запрос на сервер.
+      console.log(this.search)
+    },
     install(appName) {
       $fetch('/api/installModule', { query: { moduleName: appName } })
         .then(res => {

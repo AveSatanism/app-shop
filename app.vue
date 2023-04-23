@@ -7,9 +7,13 @@
         {{ npmPackage.name }}
         <template #subtitle>{{ npmPackage.subtitle }}</template>
         <template #button>
-          <v-btn variant="outlined" size="small" @click="install(npmPackage.name)">
+          <v-btn v-if="downloadedApp.includes(npmPackage.name)" @click="checkApp()" class="downloded_button" variant="outlined" size="small">
+            downloaded!
+          </v-btn>
+          <v-btn v-else variant="outlined" size="small" @click="install(npmPackage.name)">
             download
-          </v-btn></template>
+          </v-btn>
+        </template>
         <template #image><v-img :src="npmPackage.image"></v-img></template>
       </appCard>
     </v-container>
@@ -20,9 +24,9 @@ import { debounce } from 'perfect-debounce'
 import appCard from './components/appCard.vue'
 
 const packagesList = [
-  { name: 'lodash', subtitle: 'A modern JavaScript utility library delivering modularity, performance & extras.', image: 'https://lodash.com/assets/img/lodash.svg' },
-  { name: 'chalk', subtitle: 'Terminal string styling done right', image: 'https://raw.githubusercontent.com/chalk/chalk/HEAD/media/logo.svg' },
-  { name: 'quasar', subtitle: 'Build high-performance VueJS user interfaces in record time.', image: 'https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg' },
+  { name: 'Lodash', subtitle: 'A modern JavaScript utility library delivering modularity, performance & extras.', image: 'https://lodash.com/assets/img/lodash.svg', downloded: '' },
+  { name: 'Chalk', subtitle: 'Terminal string styling done right', image: 'https://raw.githubusercontent.com/chalk/chalk/HEAD/media/logo.svg', downloded: '' },
+  { name: 'Quasar', subtitle: 'Build high-performance VueJS user interfaces in record time.', image: 'https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg', downloded: '' },
 ]
 
 export default {
@@ -34,6 +38,7 @@ export default {
     return {
       search: '',
       appName: '',
+      downloadedApp: [],
       debouncedLogSearch: debounce(this.logSearch, 500)
     }
   },
@@ -54,9 +59,17 @@ export default {
       // Нам нужно использовать debounce, чтобы не делать запросы на сервер при каждом нажатии клавиши. Если пользователь вводит текст, то мы ждем 500 мс, и только потом делаем запрос на сервер.
       console.log(this.search)
     },
-    install(appName) {
-      $fetch('/api/installModule', { query: { moduleName: appName } })
+    checkApp() {
+      $fetch('/api/checkModule')
         .then(res => {
+          console.log(res)
+        })
+    },
+    install(appName) {
+      $fetch('/api/installModule', { query: { moduleName: appName.toLowerCase() } })
+        .then(res => {
+          this.downloadedApp.push(appName)
+          console.log(this.downloadedApp)
           console.log(res)
         })
     }
@@ -88,7 +101,11 @@ export default {
 }
 
 .v-btn {
-  width: 100px;
+  width: 120px;
+}
+
+.downloded_button {
+  color: #00ff00;
 }
 
 .v-card-actions {
